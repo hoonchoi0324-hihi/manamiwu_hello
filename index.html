@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>마나미우 엔터테인먼트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 검은 오락실 화면 위에 흰 도형 로고 — 한 줄 세로 흐름, 섹션마다 큰 제목 + 노란 강조 하나 */
+:root{
+  --bg:#0b0b0c; --panel:#161618; --line:#2c2c30; --fg:#ffffff; --muted:#b4b4bb; --accent:#FFD43B; --on-accent:#0b0b0c;
+  --display:'Black Han Sans','Noto Sans KR',system-ui,sans-serif;
+  --body:'Noto Sans KR',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.65;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+[hidden]{display:none!important}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;line-height:1.12}
+p{margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+/* 상단 바 */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--fg)}
+.brand b{font-weight:900;font-size:19px;letter-spacing:.5px}
+.nav{display:flex;gap:6px;flex-wrap:wrap}
+.nav a{color:var(--muted);text-decoration:none;font-size:15px;font-weight:500;padding:8px 12px;border-radius:999px}
+.nav a:hover{color:var(--fg);background:var(--panel)}
+.nav a.cta{background:var(--accent);color:var(--on-accent);font-weight:700}
+
+/* 히어로 */
+.hero .wrap{padding-block:72px 56px;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:40px;align-items:center}
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:2px;color:var(--accent);text-transform:uppercase}
+.hero h1{font-size:clamp(44px,8vw,84px);margin-top:14px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p.lead{margin-top:20px;font-size:19px;color:var(--muted);max-width:32em}
+.hero .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border-radius:12px;font:700 17px var(--body);text-decoration:none;border:2px solid var(--line);color:var(--fg);background:transparent;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn:hover{filter:brightness(1.08)}
+.week{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:24px}
+.week h3{font-size:22px}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:16px}
+.day{border-radius:10px;padding:10px 4px;text-align:center;background:#1f1f22;font-size:13px;color:var(--muted)}
+.day strong{display:block;font-family:var(--display);font-weight:400;font-size:20px;color:var(--fg)}
+.day.done{background:var(--accent);color:var(--on-accent)}
+.day.done strong{color:var(--on-accent)}
+.week small{display:block;margin-top:14px;color:var(--muted);font-size:14px}
+
+section{border-top:1px solid var(--line)}
+section .wrap{padding-block:64px}
+.sec-head{display:flex;flex-direction:column;gap:10px;margin-bottom:32px}
+.sec-head h2{font-size:clamp(32px,5vw,48px)}
+.sec-head p{color:var(--muted);max-width:40em}
+
+/* 회사 소개 */
+.rules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.rule{display:flex;gap:16px;align-items:flex-start;padding:20px;border:1px solid var(--line);border-radius:16px}
+.rule .big{font-family:var(--display);font-size:30px;color:var(--accent);min-width:56px;line-height:1}
+.rule h3{font-family:var(--body);font-weight:700;font-size:18px}
+.rule p{color:var(--muted);font-size:15px;margin-top:4px}
+
+/* 개발팀 */
+.team{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.member{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.member.lead{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.member .tag{font-family:var(--mono);font-size:12px;letter-spacing:1px;color:var(--muted)}
+.member.lead .tag{color:var(--on-accent)}
+.member h3{font-size:24px}
+.member p{font-size:14.5px;color:var(--muted)}
+.member.lead p{color:var(--on-accent)}
+.face{width:44px;height:44px;border-radius:12px;background:#222226;display:grid;place-items:center}
+.member.lead .face{background:var(--on-accent)}
+.flow{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:15px}
+.flow span.step{border:1px solid var(--line);border-radius:999px;padding:6px 14px;color:var(--fg)}
+
+/* 만든 게임 */
+.games{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.game{border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:8px}
+.game .kind{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:1px}
+.game h3{font-size:26px}
+.game p{color:var(--muted);font-size:15px}
+
+/* 대기 순서표 */
+.queue{border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.qrow{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px 20px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+.qrow:first-child{border-top:0}
+.qrow .n{font-family:var(--display);font-size:26px;color:var(--muted)}
+.pill{font-size:13px;font-weight:700;padding:5px 12px;border-radius:999px;white-space:nowrap}
+.pill.open{background:var(--accent);color:var(--on-accent)}
+.pill.wait{border:1px solid var(--line);color:var(--muted)}
+
+/* 주문서 */
+.order{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;align-items:start}
+form{display:flex;flex-direction:column;gap:18px;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:24px}
+.field{display:flex;flex-direction:column;gap:6px}
+label{font-weight:700;font-size:15px}
+label .opt{font-weight:400;color:var(--muted);font-size:13px}
+input[type=text],select,textarea{font:16px var(--body);color:var(--fg);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;width:100%;box-sizing:border-box}
+textarea{min-height:110px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips label{font-weight:500;border:1.5px solid var(--line);border-radius:999px;padding:9px 16px;cursor:pointer;min-height:24px}
+.chips input:checked + label{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.chips input:focus-visible + label{outline:3px solid var(--accent);outline-offset:2px}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:500;font-size:15px}
+.check input{width:22px;height:22px;accent-color:var(--accent);flex:none;margin-top:2px}
+.err{color:#ff9a7a;font-size:14px;min-height:1em}
+.result{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 84px)}
+.result h3{font-size:24px}
+.result p{color:var(--muted);font-size:15px}
+#sheet{font:14px/1.7 var(--mono);background:var(--bg);color:var(--fg);border:1.5px dashed var(--line);border-radius:12px;padding:14px;min-height:220px;white-space:pre-wrap;resize:vertical}
+.ok{color:var(--accent);font-weight:700;font-size:15px;min-height:1.4em}
+.contact{font-weight:700;color:var(--fg)}
+
+footer .wrap{padding-block:40px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+
+@media (max-width:860px){
+  .hero .wrap{grid-template-columns:minmax(0,1fr);padding-block:48px 40px}
+  .team{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .games{grid-template-columns:minmax(0,1fr)}
+  .order{grid-template-columns:minmax(0,1fr)}
+  .result{position:static}
+}
+@media (max-width:560px){
+  .rules{grid-template-columns:minmax(0,1fr)}
+  .team{grid-template-columns:minmax(0,1fr)}
+  .nav a:not(.cta){display:none}
+  .qrow{grid-template-columns:44px minmax(0,1fr) auto;padding:14px 16px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .btn,.nav a{transition:background .15s,filter .15s}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="logo">
+      <circle cx="22" cy="20" r="20"></circle>
+      <rect x="0" y="44" width="44" height="40"></rect>
+      <polygon points="48,0 48,84 88,84"></polygon>
+    </g>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="마나미우 처음으로">
+      <svg width="32" height="31" viewBox="0 0 88 84" fill="#ffffff" aria-hidden="true"><use href="#logo"></use></svg>
+      <b>manamiwu</b>
+    </a>
+    <nav class="nav" aria-label="사이트 메뉴">
+      <a href="#about">회사 소개</a>
+      <a href="#team">개발팀</a>
+      <a href="#queue">대기 순서</a>
+      <a class="cta" href="#order">게임 주문</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <div class="eyebrow">Manamiwu Entertainment</div>
+        <h1>네가 만들고 싶은 게임<br>일주일이면 <em>완성</em></h1>
+        <p class="lead">말로 설명만 해 줘. 기획하고 그리고 코딩하고 소리 넣고 시험까지 마나미우 개발팀이 다 해. 주문도 무료 완성된 게임도 무료야.</p>
+        <div class="btns">
+          <a class="btn primary" href="#order">게임 주문하기</a>
+          <a class="btn" href="#team">개발팀 보기</a>
+        </div>
+      </div>
+      <div class="week" aria-label="일주일 제작 순서">
+        <h3>게임 하나가 나오는 일주일</h3>
+        <div class="days">
+          <div class="day done"><strong>1</strong>주문서</div>
+          <div class="day"><strong>2</strong>기획</div>
+          <div class="day"><strong>3</strong>개발</div>
+          <div class="day"><strong>4</strong>개발</div>
+          <div class="day"><strong>5</strong>디자인</div>
+          <div class="day"><strong>6</strong>사운드·시험</div>
+          <div class="day"><strong>7</strong>전달</div>
+        </div>
+        <small>내 차례가 오면 7일 안에 완성해서 보내 줘요.</small>
+      </div>
+    </div>
+  </div>
+
+  <section id="about">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">회사 소개</div>
+        <h2>손님이 만들고 싶은 게임을 대신 만들어 주는 회사</h2>
+        <p>마나미우 엔터테인먼트는 "이런 게임 있으면 좋겠다"는 생각을 진짜 게임으로 만들어 줘요. 대표가 방향을 정하고 AI 개발팀이 파트를 나눠서 함께 만들어요.</p>
+      </div>
+      <div class="rules">
+        <div class="rule"><div class="big">7일</div><div><h3>일주일 안에 완성</h3><p>내 차례가 시작되면 일주일 안에 끝내는 게 우리 약속이에요.</p></div></div>
+        <div class="rule"><div class="big">0원</div><div><h3>주문도 게임도 무료</h3><p>주문할 때도 다 만든 게임을 할 때도 돈을 받지 않아요.</p></div></div>
+        <div class="rule"><div class="big">1개</div><div><h3>한 번에 한 게임씩</h3><p>대충 여러 개 만들지 않고 차례대로 하나씩 제대로 만들어요.</p></div></div>
+        <div class="rule"><div class="big">보호자</div><div><h3>연락은 보호자를 통해서</h3><p>주문은 보호자 허락을 받고 해 주세요. 이름·학교·주소 같은 개인 정보는 받지 않아요.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="team">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">개발팀</div>
+        <h2>사람 대표 한 명과 AI 개발자 일곱</h2>
+        <p>마나미우 개발1팀은 파트마다 AI가 한 자리씩 맡아요. 대표가 정한 방향대로 각 파트가 자기 일만 집중해서 해요.</p>
+      </div>
+      <div class="team">
+        <article class="member lead">
+          <div class="face"><svg width="24" height="23" viewBox="0 0 88 84" fill="#FFD43B" aria-hidden="true"><use href="#logo"></use></svg></div>
+          <div class="tag">HUMAN · 대표</div>
+          <h3>manamiwu</h3>
+          <p>무슨 게임을 만들지 정하고 다 만든 게임을 직접 해 보고 OK를 내요.</p>
+        </article>
+        <article class="member">
+          <div class="face"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFD43B" stroke-width="2" aria-hidden="true"><path d="M4 20h16M6 16V9M12 16V5M18 16v-4"/></svg></div>
+          <div class="tag">AI · 팀장</div>
+          <h3>팀장</h3>
+          <p>모든 파트의 결과물을 검사하고 고칠 점을 해당 파트에 전달해요.</p>
+        </article>
+        <article class="member">
+          <div class="face"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFD43B" stroke-width="2" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/></svg></div>
+          <div class="tag">AI · 연구파트</div>
+          <h3>연구파트</h3>
+          <p>점묘 엔진·결 엔진·발걸음 엔진처럼 다른 데 없는 새 기술을 만들어요.</p>
+        </article>
+        <article class="member">
+          <div class="face"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFD43B" stroke-width="2" aria-hidden="true"><path d="M8 6l-5 6 5 6M16 6l5 6-5 6M13.5 4l-3 16"/></svg></div>
+          <div class="tag">AI · 프로그래밍파트</div>
+          <h3>프로그래밍파트</h3>
+          <p>게임이 실제로 돌아가게 코드를 짜요. 제일 먼저 일을 시작해요.</p>
+        </article>
+        <article class="member">
+          <div class="face"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFD43B" stroke-width="2" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1 0 1.5-.8 1.5-1.6 0-1.3-1.2-1.6-1.2-2.7 0-1 .8-1.7 1.8-1.7H17a4 4 0 0 0 4-4c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7" r="1"/></svg></div>
+          <div class="tag">AI · 디자인파트</div>
+          <h3>디자인파트</h3>
+          <p>다 만든 게임을 받아서 화면과 그림을 예쁘게 다듬어요.</p>
+        </article>
+        <article class="member">
+          <div class="face"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFD43B" stroke-width="2" aria-hidden="true"><path d="M4 10v4h4l5 4V6L8 10H4zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></div>
+          <div class="tag">AI · 사운드파트</div>
+          <h3>사운드파트</h3>
+          <p>효과음과 배경 소리를 마지막에 넣어서 게임에 생기를 줘요.</p>
+        </article>
+        <article class="member">
+          <div class="face"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFD43B" stroke-width="2" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 9l6-3v12l-6-3"/></svg></div>
+          <div class="tag">AI · 마케팅파트</div>
+          <h3>마케팅파트</h3>
+          <p>게임 소개 문구와 포스터를 만들어서 사람들이 알게 해요.</p>
+        </article>
+        <article class="member">
+          <div class="face"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFD43B" stroke-width="2" aria-hidden="true"><path d="M4 4h16v16H4zM4 9h16M9 4v16"/></svg></div>
+          <div class="tag">AI · 경영파트</div>
+          <h3>경영파트</h3>
+          <p>일정과 순서표를 관리하고 약속한 일주일을 지키게 챙겨요.</p>
+        </article>
+      </div>
+      <div class="flow" aria-label="제작 순서">
+        <span>만드는 순서</span>
+        <span class="step">프로그래밍</span><span aria-hidden="true">→</span>
+        <span class="step">디자인</span><span aria-hidden="true">→</span>
+        <span class="step">사운드</span><span aria-hidden="true">→</span>
+        <span class="step">팀장 검사</span><span aria-hidden="true">→</span>
+        <span class="step">대표 OK</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="works">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">만든 것들</div>
+        <h2>마나미우가 만든 게임과 기술</h2>
+      </div>
+      <div class="games">
+        <article class="game"><div class="kind">손님 주문 · 3D 디펜스</div><h3>정령 디펜스</h3><p>손님이 주문한 첫 게임. 속성 정령으로 막는 3D 디펜스에 친구랑 같이 하는 멀티까지 넣었어요.</p></article>
+        <article class="game"><div class="kind">자체 제작 · 1인칭 3D 경영</div><h3>우주 휴게소</h3><p>우주에서 휴게소를 운영하는 게임. 프로그래밍 → 디자인 → 사운드 순서로 완성했어요.</p></article>
+        <article class="game"><div class="kind">연구파트 · 그래픽 기술</div><h3>결 엔진</h3><p>선의 굵기로 명암을 그리는 3D 기술. 판화가 움직이는 것 같은 화면을 만들어요.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="queue">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">대기 순서표</div>
+        <h2>지금 줄 서 있는 주문</h2>
+        <p>게임은 일주일에 하나씩 차례대로 만들어요. 주문이 들어오면 여기에 순서가 올라가요.</p>
+      </div>
+      <div class="queue" role="list" id="queue-list">
+        <div class="qrow" role="listitem"><div class="n">1</div><div><strong>비어 있음</strong><div style="color:var(--muted);font-size:14px">지금 주문하면 바로 시작해요</div></div><span class="pill open">주문 가능</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="order">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">게임 주문</div>
+        <h2>어떤 게임을 만들어 줄까?</h2>
+        <p>아래를 채우고 보내기를 누르면 바로 마나미우에 접수돼요. 진짜 이름·학교·주소·전화번호는 쓰지 마세요.</p>
+      </div>
+      <div class="order">
+        <form id="f" novalidate>
+          <div class="field">
+            <label for="nick">별명 <span class="opt">(진짜 이름 말고 별명)</span></label>
+            <input type="text" id="nick" maxlength="20" placeholder="예: 번개고양이" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="title">게임 제목 <span class="opt">(아직 없으면 비워 둬도 돼요)</span></label>
+            <input type="text" id="title" maxlength="40" placeholder="예: 우주 라면 가게">
+          </div>
+          <div class="field">
+            <span id="genre-label" style="font-weight:700;font-size:15px">어떤 종류?</span>
+            <div class="chips" role="radiogroup" aria-labelledby="genre-label">
+              <input type="radio" name="genre" id="g1" value="모험·RPG" checked><label for="g1">모험·RPG</label>
+              <input type="radio" name="genre" id="g2" value="공포"><label for="g2">공포</label>
+              <input type="radio" name="genre" id="g3" value="경영·키우기"><label for="g3">경영·키우기</label>
+              <input type="radio" name="genre" id="g4" value="퍼즐"><label for="g4">퍼즐</label>
+              <input type="radio" name="genre" id="g5" value="병맛"><label for="g5">병맛</label>
+              <input type="radio" name="genre" id="g6" value="레이싱·액션"><label for="g6">레이싱·액션</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="look">화면은?</label>
+            <select id="look">
+              <option>2D 픽셀</option>
+              <option>3D</option>
+              <option>상관없어요</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="story">어떤 게임인지 설명해 줘</label>
+            <textarea id="story" maxlength="600" placeholder="예: 내가 라면 가게 사장이 돼서 외계인 손님한테 라면을 끓여 주는 게임. 손님마다 좋아하는 맛이 달라."></textarea>
+            <div class="err" id="story-err" aria-live="polite"></div>
+          </div>
+          <div class="field">
+            <label for="must">꼭 넣고 싶은 것 <span class="opt">(선택)</span></label>
+            <input type="text" id="must" maxlength="120" placeholder="예: 고양이 캐릭터, 보스전">
+          </div>
+          <label class="check"><input type="checkbox" id="guard"> 보호자한테 주문해도 되는지 물어봤어요</label>
+          <div class="err" id="guard-err" aria-live="polite"></div>
+          <button class="btn primary" type="submit" id="send">주문 보내기</button>
+        </form>
+
+        <aside class="result" aria-labelledby="res-h">
+          <h3 id="res-h">내 주문서 미리 보기</h3>
+          <p>보내기 전에 한 번 확인해 줘. 접수되면 대표가 확인하고 대기 순서표에 올려 줘요.</p>
+          <textarea id="sheet" readonly aria-label="주문서 미리 보기"></textarea>
+          <div class="ok" id="ok" aria-live="polite"></div>
+          <p id="code-box" hidden>주문 번호 <span class="contact" id="code"></span> · 순서표에서 이 번호를 찾아봐</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© manamiwu entertainment · Created by manamiwu</span>
+    <span>주문도 게임도 전부 무료</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var f=document.getElementById('f'), sheet=document.getElementById('sheet'), ok=document.getElementById('ok');
+  function v(id){return document.getElementById(id).value.trim();}
+  function build(){
+    var g=(f.querySelector('input[name=genre]:checked')||{}).value||'';
+    var lines=[
+      '[마나미우 게임 주문서]',
+      '별명: '+(v('nick')||'(안 씀)'),
+      '게임 제목: '+(v('title')||'(아직 없음)'),
+      '종류: '+g,
+      '화면: '+document.getElementById('look').value,
+      '설명: '+(v('story')||'(아직 안 씀)'),
+      '꼭 넣을 것: '+(v('must')||'(없음)'),
+      '보호자 확인: '+(document.getElementById('guard').checked?'했어요':'아직')
+    ];
+    sheet.value=lines.join('\n');
+  }
+  f.addEventListener('input',function(){build();});
+  f.addEventListener('change',build);
+  build();
+  window.__mm={v:v,build:build};
+})();
+</script>
+
+<script type="module">
+/* ===== 1) 여기에 파이어베이스 설정을 붙여 넣기 =====
+   Firebase 콘솔 → 프로젝트 설정 → 내 앱(웹) → firebaseConfig 를 그대로 복사 */
+const firebaseConfig = {
+  apiKey: "여기에-붙여넣기",
+  authDomain: "manamiwu-b9392.firebaseapp.com",
+  /* 실시간 데이터베이스 주소 (싱가포르) */
+  databaseURL: "https://manamiwu-b9392-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "manamiwu-b9392",
+  storageBucket: "여기에-붙여넣기",
+  messagingSenderId: "여기에-붙여넣기",
+  appId: "여기에-붙여넣기"
+};
+/* ================================================= */
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, push, serverTimestamp, query, orderByChild, onValue }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const $ = (id) => document.getElementById(id);
+const ok = $('ok'), sendBtn = $('send');
+const ready = !String(firebaseConfig.apiKey).startsWith('여기에');
+let db = null;
+if (ready) {
+  try { db = getDatabase(initializeApp(firebaseConfig)); } catch (e) { console.error(e); }
+}
+
+/* 대기 순서표: queue (대표가 Realtime Database 콘솔에서 관리) */
+const list = $('queue-list');
+function row(no, title, sub, status) {
+  const r = document.createElement('div'); r.className = 'qrow'; r.setAttribute('role', 'listitem');
+  const n = document.createElement('div'); n.className = 'n'; n.textContent = no;
+  const mid = document.createElement('div');
+  const t = document.createElement('strong'); t.textContent = title; mid.appendChild(t);
+  if (sub) { const s = document.createElement('div'); s.style.cssText = 'color:var(--muted);font-size:14px'; s.textContent = sub; mid.appendChild(s); }
+  const p = document.createElement('span');
+  p.className = 'pill ' + (status === '만드는 중' || status === '주문 가능' ? 'open' : 'wait');
+  p.textContent = status;
+  r.append(n, mid, p); return r;
+}
+if (db) {
+  onValue(query(ref(db, 'queue'), orderByChild('no')), (snap) => {
+    list.replaceChildren();
+    const all = []; snap.forEach(c => { all.push(c.val() || {}); });
+    const items = all.filter(d => d.status !== '완성');
+    items.forEach(d => list.appendChild(row(d.no, String(d.title || '제목 미정'), d.code ? '주문 번호 ' + d.code : '', String(d.status || '대기'))));
+    list.appendChild(row(items.length + 1, '비어 있음', '지금 주문하면 ' + (items.length + 1) + '번째 차례', '주문 가능'));
+  }, (err) => console.error(err));
+}
+
+/* 주문 보내기: orders 에 저장 (누구나 새로 쓰기만 가능, 읽기는 콘솔에서만) */
+function code4() {
+  const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s = '';
+  for (let i = 0; i < 4; i++) s += c[Math.floor(Math.random() * c.length)];
+  return s;
+}
+let lastSent = 0;
+$('f').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const v = window.__mm.v;
+  $('story-err').textContent = ''; $('guard-err').textContent = ''; ok.textContent = '';
+  let bad = false;
+  if (v('story').length < 10) { $('story-err').textContent = '어떤 게임인지 한두 줄만 더 써 줘.'; bad = true; }
+  if (!$('guard').checked) { $('guard-err').textContent = '보호자한테 먼저 물어보고 체크해 줘.'; bad = true; }
+  if (bad) return;
+  if (!db) { ok.textContent = '아직 주문 접수 준비 중이에요. 조금 뒤에 다시 와 줘.'; return; }
+  if (Date.now() - lastSent < 60000) { ok.textContent = '방금 보냈어요. 1분 뒤에 다시 보낼 수 있어요.'; return; }
+  const genre = (document.querySelector('input[name=genre]:checked') || {}).value || '';
+  const code = code4();
+  sendBtn.disabled = true; ok.textContent = '보내는 중…';
+  try {
+    await push(ref(db, 'orders'), {
+      code, nick: v('nick').slice(0, 20), title: v('title').slice(0, 40), genre,
+      look: $('look').value, story: v('story').slice(0, 600), must: v('must').slice(0, 120),
+      guard: true, status: '접수', createdAt: serverTimestamp()
+    });
+    lastSent = Date.now();
+    ok.textContent = '주문이 접수됐어요! 대표가 확인하면 순서표에 올라가요.';
+    $('code').textContent = code; $('code-box').hidden = false;
+    $('f').reset(); window.__mm.build();
+  } catch (err) {
+    console.error(err);
+    ok.textContent = '보내지 못했어요. 인터넷을 확인하고 다시 눌러 줘.';
+  } finally { sendBtn.disabled = false; }
+});
+</script>
+</body>
+</html>
